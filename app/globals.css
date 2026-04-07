@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+  --background: #faf8f5;
+  --foreground: #222a26;
+  --card: #fdfdfc;
+  --card-foreground: #222a26;
+  --popover: #fdfdfc;
+  --popover-foreground: #222a26;
+  --primary: #3f835b;
+  --primary-foreground: #fbfaf8;
+  --secondary: #f0ece6;
+  --secondary-foreground: #2e3833;
+  --muted: #f3f1ed;
+  --muted-foreground: #6d7873;
+  --accent: #f1e6da;
+  --accent-foreground: #53402d;
+  --destructive: #d22d2d;
+  --destructive-foreground: #ffffff;
+  --border: #e5e2dc;
+  --input: #e5e2dc;
+  --ring: #3f835b;
+  --radius: 0.625rem;
+  --sidebar-background: #2a4636;
+  --sidebar-foreground: #ebe7e0;
+  --sidebar-primary: #b5d279;
+  --sidebar-primary-foreground: #1d3025;
+  --sidebar-accent: #395645;
+  --sidebar-accent-foreground: #f5f3f0;
+  --sidebar-border: #41584b;
+  --sidebar-ring: #b5d279;
+  --success: #36a162;
+  --success-foreground: #ffffff;
+  --warning: #f4a825;
+  --warning-foreground: #452e08;
+  --info: #3399cc;
+  --info-foreground: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar-background: var(--sidebar-background);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --radius-md: var(--radius);
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+}
