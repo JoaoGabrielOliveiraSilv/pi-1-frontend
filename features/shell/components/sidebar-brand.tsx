@@ -14,7 +14,7 @@ export function SidebarBrand() {
       </span>
       <div className="min-w-0 flex flex-col leading-tight">
         <span className="truncate text-sm font-semibold tracking-tight text-sidebar-foreground">
-          MarmitaFit
+          PrepChef
         </span>
         <span className="truncate text-xs text-sidebar-foreground/70">
           Painel administrativo
