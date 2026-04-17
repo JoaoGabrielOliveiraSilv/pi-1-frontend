@@ -1,4 +1,4 @@
-import { AppShell } from "@/features/shell";
+import { AppShell } from "@/shared";
 
 export default function AppLayout({
   children,
