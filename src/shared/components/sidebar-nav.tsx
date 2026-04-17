@@ -1,6 +1,6 @@
 "use client";
 
-import { shellNavItems } from "@/features/shell/nav.config";
+import { shellNavItems } from "@/shared/nav.config";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
