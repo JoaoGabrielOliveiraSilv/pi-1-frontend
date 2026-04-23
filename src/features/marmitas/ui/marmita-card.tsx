@@ -18,7 +18,7 @@ function formatDecimal(value: number | string) {
 export function MarmitaCard({ marmita, onEdit, onDelete }: MarmitaCardProps) {
     return (
         <div className="flex flex-col gap-3 rounded-lg border border-border bg-card p-5">
-            <div className="flex items-start justify-between gap-2">
+            <div className="flex items-center justify-between gap-2">
                 <span className="text-base font-semibold leading-tight text-foreground">
                     {marmita.descricao}
                 </span>

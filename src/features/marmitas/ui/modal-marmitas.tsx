@@ -1,6 +1,6 @@
 "use client"
 
-import { useForm } from "react-hook-form"
+import { useForm, type Resolver } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Modal } from "@/shared/components/ui/Modal"
 import { FormField } from "@/shared/components/ui/form-field"
@@ -24,7 +24,7 @@ function applyDecimalMask(value: string) {
 export function ModalMarmitas({ open, onClose }: IModalMarmitasProps) {
     const { mutate, loading } = useCreateMarmita()
     const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<MarmitaFormData>({
-        resolver: zodResolver(marmitaSchema),
+        resolver: zodResolver(marmitaSchema) as unknown as Resolver<MarmitaFormData>,
     })
 
     function handleClose() {
@@ -59,7 +59,7 @@ export function ModalMarmitas({ open, onClose }: IModalMarmitasProps) {
                             placeholder: "Ex: Marmita Frango Grelhado",
                         }}
                     />
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-4 md:flex-row justify-between">
                         <FormField
                             label="Preço base (R$) *"
                             error={errors.precoBase?.message}

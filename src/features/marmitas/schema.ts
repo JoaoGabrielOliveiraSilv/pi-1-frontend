@@ -9,15 +9,15 @@ export const marmitaSchema = z.object({
     descricao: z.string().min(1, "Descrição é obrigatória").max(255, "Máximo 255 caracteres"),
     precoBase: z.preprocess(
         parseBrazilianDecimal,
-        z.number({ invalid_type_error: "Preço inválido" }).positive("Deve ser maior que zero"),
+        z.number({ message: "Preço inválido" }).positive("Deve ser maior que zero"),
     ),
     adicionalEmbalagem: z.preprocess(
         parseBrazilianDecimal,
-        z.number({ invalid_type_error: "Adicional inválido" }).min(0, "Mínimo 0,00").max(0.99, "Máximo 0,99"),
+        z.number({ message: "Adicional inválido" }).min(0, "Mínimo 0,00").max(0.99, "Máximo 0,99"),
     ),
     peso: z.preprocess(
         parseBrazilianDecimal,
-        z.number({ invalid_type_error: "Peso inválido" }).positive("Deve ser maior que zero"),
+        z.number({ message: "Peso inválido" }).positive("Deve ser maior que zero"),
     ),
 })
 

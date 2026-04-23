@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, type Resolver } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Modal } from "@/shared/components/ui/Modal"
 import { FormField } from "@/shared/components/ui/form-field"
@@ -30,7 +30,7 @@ function toDecimalDisplay(value: number | string) {
 export function ModalEditMarmitas({ marmita, onClose }: IModalEditMarmitasProps) {
     const { mutate, loading } = useUpdateMarmita()
     const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<MarmitaFormData>({
-        resolver: zodResolver(marmitaSchema),
+        resolver: zodResolver(marmitaSchema) as unknown as Resolver<MarmitaFormData>,
     })
 
     useEffect(() => {
