@@ -1,6 +1,9 @@
+export type { PaginatedMeta, PaginatedResponse } from "@/shared/types/pagination"
+
 export type Marmita = {
-  id: number;
-  name: string;
-  sku: string;
-  description: string;
-};
+  idMarmita: number
+  descricao: string
+  precoBase: string
+  adicionalEmbalagem: string
+  peso: string
+}
