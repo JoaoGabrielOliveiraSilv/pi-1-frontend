@@ -3,21 +3,14 @@
 import { useState } from "react"
 import { ModalMarmitas } from "./modal-marmitas"
 import { ModalEditMarmitas } from "./modal-edit-marmitas"
-import { Button, CardList, ListPageLayout, ResourceRowCard, RowEditDeleteActions } from "../../../../components"
+import { MarmitaCard } from "./marmita-card"
+import { Button, ListPageLayout } from "../../../../components"
 import { Plus } from "lucide-react"
 import { useMarmitas } from "../hooks/use-marmitas"
 import { useDeleteMarmita } from "../hooks/use-delete-marmita"
 import { Input } from "@/shared/components/ui/input"
 import { Marmita } from "../types"
 import { useDebounce } from "@/shared/hooks/use-debounce"
-
-function formatCurrency(value: number | string) {
-    return Number(value).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
-}
-
-function formatDecimal(value: number | string) {
-    return Number(value).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-}
 
 export function MarmitasView() {
     const [modalOpen, setModalOpen] = useState(false)
@@ -43,28 +36,22 @@ export function MarmitasView() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
-                <CardList
-                    items={loading ? [] : marmitas}
-                    getKey={(m) => m.idMarmita}
-                    empty={
-                        <p className="text-lg font-medium text-muted-foreground">
-                            {loading ? "Carregando..." : "Nenhuma marmita encontrada"}
-                        </p>
-                    }
-                    renderItem={(marmita) => (
-                        <ResourceRowCard
-                            title={marmita.descricao}
-                            subtitle={formatCurrency(marmita.precoBase)}
-                            description={`${formatDecimal(marmita.peso)} kg · embalagem ${formatCurrency(marmita.adicionalEmbalagem)}`}
-                            actions={
-                                <RowEditDeleteActions
-                                    onEdit={() => setEditingMarmita(marmita)}
-                                    onDelete={() => deleteMarmita(marmita.idMarmita)}
-                                />
-                            }
-                        />
-                    )}
-                />
+                {loading ? (
+                    <p className="text-lg font-medium text-muted-foreground">Carregando...</p>
+                ) : marmitas.length === 0 ? (
+                    <p className="text-lg font-medium text-muted-foreground">Nenhuma marmita encontrada</p>
+                ) : (
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        {marmitas.map((marmita) => (
+                            <MarmitaCard
+                                key={marmita.idMarmita}
+                                marmita={marmita}
+                                onEdit={() => setEditingMarmita(marmita)}
+                                onDelete={() => deleteMarmita(marmita.idMarmita)}
+                            />
+                        ))}
+                    </div>
+                )}
             </ListPageLayout>
         </>
     )
