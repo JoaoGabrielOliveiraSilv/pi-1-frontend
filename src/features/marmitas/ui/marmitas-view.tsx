@@ -1,36 +1,65 @@
+"use client"
 
-import { Button, CardList, ListPageLayout, ResourceRowCard, RowEditDeleteActions } from "../../../../components";
-import type { Marmita } from "../types";
-import { Plus } from "lucide-react";
+import { useState } from "react"
+import { ModalMarmitas } from "./modal-marmitas"
+import { ModalEditMarmitas } from "./modal-edit-marmitas"
+import { Button, CardList, ListPageLayout, ResourceRowCard, RowEditDeleteActions } from "../../../../components"
+import { Plus } from "lucide-react"
+import { useMarmitas } from "../hooks/use-marmitas"
+import { useDeleteMarmita } from "../hooks/use-delete-marmita"
+import { Input } from "@/shared/components/ui/input"
+import { Marmita } from "../types"
+
+function formatCurrency(value: number) {
+    return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
+}
 
 export function MarmitasView() {
-  const marmitas: Marmita[] = [];
+    const [modalOpen, setModalOpen] = useState(false)
+    const [editingMarmita, setEditingMarmita] = useState<Marmita | null>(null)
+    const [search, setSearch] = useState("")
+    const { marmitas, loading } = useMarmitas({ search })
+    const { mutate: deleteMarmita } = useDeleteMarmita()
 
-  return (
-    <ListPageLayout
-      title="Marmitas"
-      description="Gerencie seu cardápio de marmitas."
-      headerAction={
-        <Button className="mt-4 shrink-0" icon={Plus} label="Nova marmita" />
-      }
-    >
-      <CardList
-        items={marmitas}
-        getKey={(m) => m.id}
-        empty={
-          <p className="text-lg font-medium text-muted-foreground">
-            Nenhuma marmita encontrada
-          </p>
-        }
-        renderItem={(marmita) => (
-          <ResourceRowCard
-            title={marmita.name}
-            subtitle={marmita.sku}
-            description={marmita.description || undefined}
-            actions={<RowEditDeleteActions />}
-          />
-        )}
-      />
-    </ListPageLayout>
-  );
+    return (
+        <>
+            <ModalMarmitas open={modalOpen} onClose={() => setModalOpen(false)} />
+            <ModalEditMarmitas marmita={editingMarmita} onClose={() => setEditingMarmita(null)} />
+            <ListPageLayout
+                title="Marmitas"
+                description="Gerencie seu cardápio de marmitas."
+                headerAction={
+                    <Button className="mt-4 shrink-0" icon={Plus} label="Nova marmita" onClick={() => setModalOpen(true)} />
+                }
+            >
+                <Input
+                    placeholder="Buscar marmitas..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+                <CardList
+                    items={loading ? [] : marmitas}
+                    getKey={(m) => m.idMarmita}
+                    empty={
+                        <p className="text-lg font-medium text-muted-foreground">
+                            {loading ? "Carregando..." : "Nenhuma marmita encontrada"}
+                        </p>
+                    }
+                    renderItem={(marmita) => (
+                        <ResourceRowCard
+                            title={marmita.descricao}
+                            subtitle={formatCurrency(marmita.precoBase)}
+                            description={`${marmita.peso} kg · embalagem ${formatCurrency(marmita.adicionalEmbalagem)}`}
+                            actions={
+                                <RowEditDeleteActions
+                                    onEdit={() => setEditingMarmita(marmita)}
+                                    onDelete={() => deleteMarmita(marmita.idMarmita)}
+                                />
+                            }
+                        />
+                    )}
+                />
+            </ListPageLayout>
+        </>
+    )
 }
