@@ -1,7 +1,12 @@
 import { Button } from "./button";
 import { Edit, Trash } from "lucide-react";
 
-export function RowEditDeleteActions() {
+interface RowEditDeleteActionsProps {
+  onEdit?: () => void
+  onDelete?: () => void
+}
+
+export function RowEditDeleteActions({ onEdit, onDelete }: RowEditDeleteActionsProps) {
   return (
     <>
       <Button
@@ -9,12 +14,14 @@ export function RowEditDeleteActions() {
         icon={Edit}
         label="Editar"
         iconClassName="text-muted-foreground"
+        onClick={onEdit}
       />
       <Button
         variant="icon"
         icon={Trash}
         label="Excluir"
         iconClassName="text-destructive"
+        onClick={onDelete}
       />
     </>
   );

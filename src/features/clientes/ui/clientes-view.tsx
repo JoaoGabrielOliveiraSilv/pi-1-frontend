@@ -1,37 +1,57 @@
+"use client"
 
-import { Modal } from "@/shared/components/ui/Modal";
+import { useState } from "react";
+import { ModalClientes } from "./modal-clientes";
+import { ModalEditClientes } from "./modal-edit-clientes";
 import { ListPageLayout, Button, CardList, ResourceRowCard, RowEditDeleteActions } from "../../../../components";
-import type { Cliente } from "../types";
 import { Plus } from "lucide-react";
+import { useClientes } from "../hooks/use-clientes";
+import { useDeleteCliente } from "../hooks/use-delete-cliente";
+import { Input } from "@/shared/components/ui/input";
+import { Cliente } from "../types";
 
 export function ClientesView() {
-  const clientes: Cliente[] = [];
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingCliente, setEditingCliente] = useState<Cliente | null>(null);
+  const [search, setSearch] = useState("");
+  const { clientes, loading } = useClientes({ search });
+  const { mutate: deleteCliente } = useDeleteCliente();
 
   return (
     <>
-      <Modal title="Novo cliente"><></></Modal>
+      <ModalClientes open={modalOpen} onClose={() => setModalOpen(false)} />
+      <ModalEditClientes cliente={editingCliente} onClose={() => setEditingCliente(null)} />
       <ListPageLayout
         title="Clientes"
         description="Gerencie seus clientes."
         headerAction={
-          <Button className="mt-4 shrink-0" icon={Plus} label="Novo cliente" />
+          <Button className="mt-4 shrink-0" icon={Plus} label="Novo cliente" onClick={() => setModalOpen(true)} />
         }
       >
-
+        <Input
+          placeholder="Buscar clientes..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
         <CardList
-          items={clientes}
-          getKey={(c) => c.id}
+          items={loading ? [] : clientes}
+          getKey={(c) => c.idClientes}
           empty={
             <p className="text-lg font-medium text-muted-foreground">
-              Nenhum cliente encontrado
+              {loading ? "Carregando..." : "Nenhum cliente encontrado"}
             </p>
           }
           renderItem={(cliente) => (
             <ResourceRowCard
-              title={cliente.name}
-              subtitle={cliente.phone}
-              description={cliente.notes || undefined}
-              actions={<RowEditDeleteActions />}
+              title={cliente.nome}
+              subtitle={cliente.telefone}
+              description={cliente.obs ?? undefined}
+              actions={
+                <RowEditDeleteActions
+                  onEdit={() => setEditingCliente(cliente)}
+                  onDelete={() => deleteCliente(cliente.idClientes)}
+                />
+              }
             />
           )}
         />

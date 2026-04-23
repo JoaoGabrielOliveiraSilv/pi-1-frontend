@@ -1,10 +1,5 @@
-import {
-  Button,
-  CardList,
-  ListPageLayout,
-  ResourceRowCard,
-  RowEditDeleteActions,
-} from "@/components";
+
+import { Button, CardList, ListPageLayout, ResourceRowCard, RowEditDeleteActions } from "../../../../components";
 import type { Marmita } from "../types";
 import { Plus } from "lucide-react";
 

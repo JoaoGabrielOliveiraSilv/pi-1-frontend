@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import { QueryProvider } from "@/shared/components/query-provider";
+import { Toaster } from "sonner";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -24,7 +26,10 @@ export default function RootLayout({
       className={`${dmSans.variable} h-full antialiased`}
     >
       <body className="bg-background flex min-h-full flex-col font-sans">
-        {children}
+        <QueryProvider>
+            {children}
+            <Toaster richColors position="bottom-left" />
+          </QueryProvider>
       </body>
     </html>
   );
