@@ -23,8 +23,8 @@ function applyDecimalMask(value: string) {
     return intPart + "," + rest.join("").slice(0, 2)
 }
 
-function toDecimalDisplay(value: number) {
-    return value.toFixed(2).replace(".", ",")
+function toDecimalDisplay(value: number | string) {
+    return Number(value).toFixed(2).replace(".", ",")
 }
 
 export function ModalEditMarmitas({ marmita, onClose }: IModalEditMarmitasProps) {
