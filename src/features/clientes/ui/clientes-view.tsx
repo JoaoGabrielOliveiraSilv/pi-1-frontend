@@ -9,12 +9,14 @@ import { useClientes } from "../hooks/use-clientes";
 import { useDeleteCliente } from "../hooks/use-delete-cliente";
 import { Input } from "@/shared/components/ui/input";
 import { Cliente } from "../types";
+import { useDebounce } from "@/shared/hooks/use-debounce";
 
 export function ClientesView() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingCliente, setEditingCliente] = useState<Cliente | null>(null);
   const [search, setSearch] = useState("");
-  const { clientes, loading } = useClientes({ search });
+  const debouncedSearch = useDebounce(search);
+  const { clientes, loading } = useClientes({ search: debouncedSearch });
   const { mutate: deleteCliente } = useDeleteCliente();
 
   return (

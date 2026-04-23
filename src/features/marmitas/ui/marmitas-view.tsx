@@ -9,6 +9,7 @@ import { useMarmitas } from "../hooks/use-marmitas"
 import { useDeleteMarmita } from "../hooks/use-delete-marmita"
 import { Input } from "@/shared/components/ui/input"
 import { Marmita } from "../types"
+import { useDebounce } from "@/shared/hooks/use-debounce"
 
 function formatCurrency(value: number | string) {
     return Number(value).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
@@ -22,7 +23,8 @@ export function MarmitasView() {
     const [modalOpen, setModalOpen] = useState(false)
     const [editingMarmita, setEditingMarmita] = useState<Marmita | null>(null)
     const [search, setSearch] = useState("")
-    const { marmitas, loading } = useMarmitas({ search })
+    const debouncedSearch = useDebounce(search)
+    const { marmitas, loading } = useMarmitas({ search: debouncedSearch })
     const { mutate: deleteMarmita } = useDeleteMarmita()
 
     return (
