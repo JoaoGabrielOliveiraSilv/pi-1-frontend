@@ -6,11 +6,12 @@ import { X } from "lucide-react"
 export interface IModalProps {
     title: string
     children: React.ReactNode
+    footer?: React.ReactNode
     onClose: () => void
     open: boolean
 }
 
-export function Modal({ open, onClose, title, children }: IModalProps) {
+export function Modal({ open, onClose, title, children, footer }: IModalProps) {
     useEffect(() => {
         if (open) document.body.style.overflow = "hidden"
         else document.body.style.overflow = ""
@@ -32,9 +33,14 @@ export function Modal({ open, onClose, title, children }: IModalProps) {
                     <h2 className="text-lg font-bold tracking-tight text-foreground">{title}</h2>
                     <X size={16} className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground" onClick={onClose} />
                 </div>
-                <div className="max-h-[75svh] overflow-y-auto px-5 pb-8 pt-4 md:max-h-[80vh] md:pb-5">
+                <div className="overflow-y-auto px-5 pt-4 pb-2 max-h-[60svh] md:max-h-[70vh]">
                     {children}
                 </div>
+                {footer != null && (
+                    <div className="border-t border-border px-5 py-4">
+                        {footer}
+                    </div>
+                )}
             </div>
         </div>
     )

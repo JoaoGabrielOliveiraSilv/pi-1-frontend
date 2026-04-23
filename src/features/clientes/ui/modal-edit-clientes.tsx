@@ -53,24 +53,23 @@ export function ModalEditClientes({ cliente, onClose }: IModalEditClientesProps)
     }
 
     return (
-        <Modal title="Editar cliente" open={!!cliente} onClose={handleClose}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <Modal
+            title="Editar cliente"
+            open={!!cliente}
+            onClose={handleClose}
+            footer={<Button label="Salvar" className="w-full" type="submit" form="form-editar-cliente" disabled={loading} />}
+        >
+            <form id="form-editar-cliente" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-4">
                     <FormField
                         label="Nome *"
                         error={errors.nome?.message}
-                        inputProps={{
-                            ...register("nome"),
-                            placeholder: "Ex: João Silva",
-                        }}
+                        inputProps={{ ...register("nome"), placeholder: "Ex: João Silva" }}
                     />
                     <FormField
                         label="Endereço *"
                         error={errors.endereco?.message}
-                        inputProps={{
-                            ...register("endereco"),
-                            placeholder: "Ex: Rua das Flores, 123",
-                        }}
+                        inputProps={{ ...register("endereco"), placeholder: "Ex: Rua das Flores, 123" }}
                     />
                     <FormField
                         label="Telefone *"
@@ -88,12 +87,8 @@ export function ModalEditClientes({ cliente, onClose }: IModalEditClientesProps)
                         type="textarea"
                         label="Observação"
                         error={errors.obs?.message}
-                        textAreaProps={{
-                            ...register("obs"),
-                            placeholder: "Alérgico a camarão",
-                        }}
+                        textAreaProps={{ ...register("obs"), placeholder: "Alérgico a camarão" }}
                     />
-                    <Button label="Salvar" className="w-full" type="submit" disabled={loading} />
                 </div>
             </form>
         </Modal>

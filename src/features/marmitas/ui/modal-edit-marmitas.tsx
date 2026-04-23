@@ -66,47 +66,36 @@ export function ModalEditMarmitas({ marmita, onClose }: IModalEditMarmitasProps)
     }
 
     return (
-        <Modal title="Editar marmita" open={!!marmita} onClose={handleClose}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <Modal
+            title="Editar marmita"
+            open={!!marmita}
+            onClose={handleClose}
+            footer={<Button label="Salvar" className="w-full" type="submit" form="form-editar-marmita" disabled={loading} />}
+        >
+            <form id="form-editar-marmita" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-4">
                     <FormField
                         label="Descrição *"
                         error={errors.descricao?.message}
-                        inputProps={{
-                            ...register("descricao"),
-                            placeholder: "Ex: Marmita Frango Grelhado",
-                        }}
+                        inputProps={{ ...register("descricao"), placeholder: "Ex: Marmita Frango Grelhado" }}
                     />
                     <div className="grid grid-cols-2 gap-4">
                         <FormField
                             label="Preço base (R$) *"
                             error={errors.precoBase?.message}
-                            inputProps={{
-                                ...decimalField("precoBase"),
-                                placeholder: "18,50",
-                                inputMode: "decimal",
-                            }}
+                            inputProps={{ ...decimalField("precoBase"), placeholder: "18,50", inputMode: "decimal" }}
                         />
                         <FormField
                             label="Adicional embalagem (R$) *"
                             error={errors.adicionalEmbalagem?.message}
-                            inputProps={{
-                                ...decimalField("adicionalEmbalagem"),
-                                placeholder: "0,50",
-                                inputMode: "decimal",
-                            }}
+                            inputProps={{ ...decimalField("adicionalEmbalagem"), placeholder: "0,50", inputMode: "decimal" }}
                         />
                     </div>
                     <FormField
                         label="Peso (kg) *"
                         error={errors.peso?.message}
-                        inputProps={{
-                            ...decimalField("peso"),
-                            placeholder: "0,80",
-                            inputMode: "decimal",
-                        }}
+                        inputProps={{ ...decimalField("peso"), placeholder: "0,80", inputMode: "decimal" }}
                     />
-                    <Button label="Salvar" className="w-full" type="submit" disabled={loading} />
                 </div>
             </form>
         </Modal>
