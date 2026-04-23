@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'feat: implement clientes CRUD module *)",
+      "Bash(git push *)",
+      "Bash(gh pr create --title 'feat: módulo completo de CRUD de clientes' --base main --head joaogabriel/clientes-module --body ' *)",
+      "Bash(git branch *)",
+      "Bash(git commit -m 'feat: implement marmitas CRUD module *)",
+      "Bash(gh pr create --title 'feat: módulo completo de CRUD de marmitas' --base joaogabriel/clientes-module --head joaogabriel/marmitas-module --body ' *)",
+      "Bash(git commit -m 'fix: use comma as decimal separator in marmitas forms *)",
+      "Bash(git commit -m 'fix: format marmitas display with Brazilian locale and R$ prefix *)",
+      "Bash(git commit *)",
+      "Bash(gh pr edit 3 --body ' *)"
+    ]
+  }
+}
