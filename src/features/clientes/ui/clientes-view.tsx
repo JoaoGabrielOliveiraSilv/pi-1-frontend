@@ -10,6 +10,7 @@ import { useDeleteCliente } from "../hooks/use-delete-cliente";
 import { Input } from "@/shared/components/ui/input";
 import { Cliente } from "../types";
 import { useDebounce } from "@/shared/hooks/use-debounce";
+import { applyPhoneMask } from "../utils";
 
 export function ClientesView() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -46,7 +47,7 @@ export function ClientesView() {
           renderItem={(cliente) => (
             <ResourceRowCard
               title={cliente.nome}
-              subtitle={cliente.telefone}
+              subtitle={applyPhoneMask(cliente.telefone)}
               description={cliente.obs ?? undefined}
               actions={
                 <RowEditDeleteActions

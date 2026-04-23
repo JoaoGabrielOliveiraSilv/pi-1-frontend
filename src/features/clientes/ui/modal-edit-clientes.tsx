@@ -9,19 +9,13 @@ import { Button } from "../../../../components"
 import { useUpdateCliente } from "../hooks/use-update-cliente"
 import { clienteSchema, ClienteFormData } from "../schema"
 import { Cliente } from "../types"
+import { applyPhoneMask } from "../utils"
 
 interface IModalEditClientesProps {
     cliente: Cliente | null
     onClose: () => void
 }
 
-function applyPhoneMask(value: string) {
-    const digits = value.replace(/\D/g, "").slice(0, 11)
-    if (digits.length <= 10) {
-        return digits.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3").trim()
-    }
-    return digits.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3").trim()
-}
 
 export function ModalEditClientes({ cliente, onClose }: IModalEditClientesProps) {
     const { mutate, loading } = useUpdateCliente()
