@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ModalClientes } from "./modal-clientes";
 import { ModalEditClientes } from "./modal-edit-clientes";
-import { ListPageLayout, Button, CardList, ResourceRowCard, RowEditDeleteActions } from "../../../../components";
+import { ListPageLayout, FloatingActionButton, CardList, ResourceRowCard, RowEditDeleteActions } from "../../../../components";
 import { Plus } from "lucide-react";
 import { useClientes } from "../hooks/use-clientes";
 import { useDeleteCliente } from "../hooks/use-delete-cliente";
@@ -24,12 +24,10 @@ export function ClientesView() {
     <>
       <ModalClientes open={modalOpen} onClose={() => setModalOpen(false)} />
       <ModalEditClientes cliente={editingCliente} onClose={() => setEditingCliente(null)} />
+      <FloatingActionButton icon={Plus} label="Novo cliente" onClick={() => setModalOpen(true)} />
       <ListPageLayout
         title="Clientes"
         description="Gerencie seus clientes."
-        headerAction={
-          <Button className="mt-4 shrink-0" icon={Plus} label="Novo cliente" onClick={() => setModalOpen(true)} />
-        }
       >
         <Input
           placeholder="Buscar clientes..."
