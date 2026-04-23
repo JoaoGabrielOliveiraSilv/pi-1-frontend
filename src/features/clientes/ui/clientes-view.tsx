@@ -24,10 +24,14 @@ export function ClientesView() {
     <>
       <ModalClientes open={modalOpen} onClose={() => setModalOpen(false)} />
       <ModalEditClientes cliente={editingCliente} onClose={() => setEditingCliente(null)} />
-      <FloatingActionButton icon={Plus} label="Novo cliente" onClick={() => setModalOpen(true)} />
       <ListPageLayout
         title="Clientes"
         description="Gerencie seus clientes."
+        headerAction={{
+          label: "Novo cliente",
+          icon: Plus,
+          onClick: () => setModalOpen(true)
+        }}
       >
         <Input
           placeholder="Buscar clientes..."

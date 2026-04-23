@@ -1,9 +1,16 @@
 import type { ReactNode } from "react";
+import { FloatingActionButton } from "./floating-action-button";
+import { LucideIcon } from "lucide-react";
+import { Button } from "./button";
 
 export type ListPageLayoutProps = {
   title: string;
   description: string;
-  headerAction?: ReactNode;
+  headerAction?: {
+    icon: LucideIcon,
+    onClick: () => void,
+    label: string
+  };
   children: ReactNode;
 };
 
@@ -25,7 +32,10 @@ export function ListPageLayout({
           </p>
         </div>
         {headerAction != null ? (
-          <div className="flex flex-1 justify-end">{headerAction}</div>
+          <>
+            <FloatingActionButton className="md:hidden" icon={headerAction.icon} label={headerAction.label} onClick={headerAction.onClick} />
+            <div className="hidden md:flex flex-1 justify-end py-2">{<Button label={headerAction.label} icon={headerAction.icon} onClick={headerAction.onClick} />}</div>
+          </>
         ) : null}
       </div>
       {children}

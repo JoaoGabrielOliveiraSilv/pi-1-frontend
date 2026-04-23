@@ -8,7 +8,7 @@ interface RowEditDeleteActionsProps {
 
 export function RowEditDeleteActions({ onEdit, onDelete }: RowEditDeleteActionsProps) {
   return (
-    <>
+    <div className="flex">
       <Button
         variant="icon"
         icon={Edit}
@@ -23,6 +23,6 @@ export function RowEditDeleteActions({ onEdit, onDelete }: RowEditDeleteActionsP
         iconClassName="text-destructive"
         onClick={onDelete}
       />
-    </>
+    </div>
   );
 }
