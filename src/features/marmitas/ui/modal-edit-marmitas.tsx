@@ -9,15 +9,27 @@ import { Button } from "../../../../components"
 import { useUpdateMarmita } from "../hooks/use-update-marmita"
 import { marmitaSchema, MarmitaFormData } from "../schema"
 import { Marmita } from "../types"
+import { UpdateMarmitaPayload } from "../services"
 
 interface IModalEditMarmitasProps {
     marmita: Marmita | null
     onClose: () => void
 }
 
+function applyDecimalMask(value: string) {
+    const cleaned = value.replace(/[^\d,]/g, "")
+    const [intPart, ...rest] = cleaned.split(",")
+    if (rest.length === 0) return intPart
+    return intPart + "," + rest.join("").slice(0, 2)
+}
+
+function toDecimalDisplay(value: number) {
+    return value.toFixed(2).replace(".", ",")
+}
+
 export function ModalEditMarmitas({ marmita, onClose }: IModalEditMarmitasProps) {
     const { mutate, loading } = useUpdateMarmita()
-    const { register, handleSubmit, reset, formState: { errors } } = useForm<MarmitaFormData>({
+    const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<MarmitaFormData>({
         resolver: zodResolver(marmitaSchema),
     })
 
@@ -25,9 +37,9 @@ export function ModalEditMarmitas({ marmita, onClose }: IModalEditMarmitasProps)
         if (marmita) {
             reset({
                 descricao: marmita.descricao,
-                precoBase: marmita.precoBase,
-                adicionalEmbalagem: marmita.adicionalEmbalagem,
-                peso: marmita.peso,
+                precoBase: toDecimalDisplay(marmita.precoBase),
+                adicionalEmbalagem: toDecimalDisplay(marmita.adicionalEmbalagem),
+                peso: toDecimalDisplay(marmita.peso),
             })
         }
     }, [marmita, reset])
@@ -39,9 +51,18 @@ export function ModalEditMarmitas({ marmita, onClose }: IModalEditMarmitasProps)
 
     async function onSubmit(data: MarmitaFormData) {
         if (!marmita) return
-        await mutate(marmita.idMarmita, data)
+        await mutate(marmita.idMarmita, data as unknown as UpdateMarmitaPayload)
         reset()
         onClose()
+    }
+
+    function decimalField(field: keyof MarmitaFormData) {
+        return {
+            ...register(field),
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                setValue(field, applyDecimalMask(e.target.value), { shouldValidate: true })
+            },
+        }
     }
 
     return (
@@ -61,23 +82,18 @@ export function ModalEditMarmitas({ marmita, onClose }: IModalEditMarmitasProps)
                             label="Preço base (R$) *"
                             error={errors.precoBase?.message}
                             inputProps={{
-                                ...register("precoBase"),
-                                type: "number",
-                                step: "0.01",
-                                min: "0.01",
-                                placeholder: "18.50",
+                                ...decimalField("precoBase"),
+                                placeholder: "18,50",
+                                inputMode: "decimal",
                             }}
                         />
                         <FormField
                             label="Adicional embalagem (R$) *"
                             error={errors.adicionalEmbalagem?.message}
                             inputProps={{
-                                ...register("adicionalEmbalagem"),
-                                type: "number",
-                                step: "0.01",
-                                min: "0",
-                                max: "0.99",
-                                placeholder: "0.50",
+                                ...decimalField("adicionalEmbalagem"),
+                                placeholder: "0,50",
+                                inputMode: "decimal",
                             }}
                         />
                     </div>
@@ -85,11 +101,9 @@ export function ModalEditMarmitas({ marmita, onClose }: IModalEditMarmitasProps)
                         label="Peso (kg) *"
                         error={errors.peso?.message}
                         inputProps={{
-                            ...register("peso"),
-                            type: "number",
-                            step: "0.01",
-                            min: "0.01",
-                            placeholder: "0.80",
+                            ...decimalField("peso"),
+                            placeholder: "0,80",
+                            inputMode: "decimal",
                         }}
                     />
                     <Button label="Salvar" className="w-full" type="submit" disabled={loading} />

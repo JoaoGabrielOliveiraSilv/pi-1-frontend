@@ -1,17 +1,30 @@
 import { z } from "zod"
 
+function parseBrazilianDecimal(val: unknown) {
+    if (typeof val === "string") return parseFloat(val.replace(",", "."))
+    return val
+}
+
 export const marmitaSchema = z.object({
     descricao: z.string().min(1, "Descrição é obrigatória").max(255, "Máximo 255 caracteres"),
-    precoBase: z.coerce
-        .number({ invalid_type_error: "Preço inválido" })
-        .positive("Deve ser maior que zero"),
-    adicionalEmbalagem: z.coerce
-        .number({ invalid_type_error: "Adicional inválido" })
-        .min(0, "Mínimo 0.00")
-        .max(0.99, "Máximo 0.99"),
-    peso: z.coerce
-        .number({ invalid_type_error: "Peso inválido" })
-        .positive("Deve ser maior que zero"),
+    precoBase: z.preprocess(
+        parseBrazilianDecimal,
+        z.number({ invalid_type_error: "Preço inválido" }).positive("Deve ser maior que zero"),
+    ),
+    adicionalEmbalagem: z.preprocess(
+        parseBrazilianDecimal,
+        z.number({ invalid_type_error: "Adicional inválido" }).min(0, "Mínimo 0,00").max(0.99, "Máximo 0,99"),
+    ),
+    peso: z.preprocess(
+        parseBrazilianDecimal,
+        z.number({ invalid_type_error: "Peso inválido" }).positive("Deve ser maior que zero"),
+    ),
 })
 
-export type MarmitaFormData = z.infer<typeof marmitaSchema>
+// Form holds string values; zodResolver preprocesses them to numbers on submit
+export type MarmitaFormData = {
+    descricao: string
+    precoBase: string
+    adicionalEmbalagem: string
+    peso: string
+}
