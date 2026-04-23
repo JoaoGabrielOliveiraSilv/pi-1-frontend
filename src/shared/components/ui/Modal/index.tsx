@@ -24,7 +24,7 @@ export function Modal({ open, onClose, title, children, footer }: IModalProps) {
         >
             <div className="absolute inset-0 bg-black/50" onClick={onClose} />
             <div
-                className={`relative z-10 flex w-full flex-col rounded-t-2xl bg-background shadow-xl transition-transform duration-300 ease-out md:max-w-lg md:rounded-xl ${open ? "translate-y-0" : "translate-y-full md:translate-y-0"}`}
+                className={`relative z-10 flex w-full flex-col rounded-t-2xl bg-background shadow-xl transition-transform duration-300 ease-out mb-16 md:mb-0 md:max-w-lg md:rounded-xl ${open ? "translate-y-0" : "translate-y-full md:translate-y-0"}`}
             >
                 <div className="flex justify-center pb-1 pt-3 md:hidden">
                     <div className="h-1 w-10 rounded-full bg-muted-foreground/30" />
