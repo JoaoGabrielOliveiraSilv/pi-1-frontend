@@ -4,7 +4,7 @@ import { useState } from "react"
 import { ModalMarmitas } from "./modal-marmitas"
 import { ModalEditMarmitas } from "./modal-edit-marmitas"
 import { MarmitaCard } from "./marmita-card"
-import { Button, ListPageLayout } from "../../../../components"
+import { ListPageLayout } from "../../../../components"
 import { Plus } from "lucide-react"
 import { useMarmitas } from "../hooks/use-marmitas"
 import { useDeleteMarmita } from "../hooks/use-delete-marmita"
@@ -27,9 +27,11 @@ export function MarmitasView() {
             <ListPageLayout
                 title="Marmitas"
                 description="Gerencie seu cardápio de marmitas."
-                headerAction={
-                    <Button className="mt-4 shrink-0" icon={Plus} label="Nova marmita" onClick={() => setModalOpen(true)} />
-                }
+                headerAction={{
+                    label: "Nova marmita",
+                    icon: Plus,
+                    onClick: () => setModalOpen(true)
+                }}
             >
                 <Input
                     placeholder="Buscar marmitas..."

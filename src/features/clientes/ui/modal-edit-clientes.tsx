@@ -9,19 +9,13 @@ import { Button } from "../../../../components"
 import { useUpdateCliente } from "../hooks/use-update-cliente"
 import { clienteSchema, ClienteFormData } from "../schema"
 import { Cliente } from "../types"
+import { applyPhoneMask } from "../utils"
 
 interface IModalEditClientesProps {
     cliente: Cliente | null
     onClose: () => void
 }
 
-function applyPhoneMask(value: string) {
-    const digits = value.replace(/\D/g, "").slice(0, 11)
-    if (digits.length <= 10) {
-        return digits.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3").trim()
-    }
-    return digits.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3").trim()
-}
 
 export function ModalEditClientes({ cliente, onClose }: IModalEditClientesProps) {
     const { mutate, loading } = useUpdateCliente()
@@ -53,24 +47,23 @@ export function ModalEditClientes({ cliente, onClose }: IModalEditClientesProps)
     }
 
     return (
-        <Modal title="Editar cliente" open={!!cliente} onClose={handleClose}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <Modal
+            title="Editar cliente"
+            open={!!cliente}
+            onClose={handleClose}
+            footer={<Button label="Salvar" className="w-full" type="submit" form="form-editar-cliente" disabled={loading} />}
+        >
+            <form id="form-editar-cliente" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-4">
                     <FormField
                         label="Nome *"
                         error={errors.nome?.message}
-                        inputProps={{
-                            ...register("nome"),
-                            placeholder: "Ex: João Silva",
-                        }}
+                        inputProps={{ ...register("nome"), placeholder: "Ex: João Silva" }}
                     />
                     <FormField
                         label="Endereço *"
                         error={errors.endereco?.message}
-                        inputProps={{
-                            ...register("endereco"),
-                            placeholder: "Ex: Rua das Flores, 123",
-                        }}
+                        inputProps={{ ...register("endereco"), placeholder: "Ex: Rua das Flores, 123" }}
                     />
                     <FormField
                         label="Telefone *"
@@ -88,12 +81,8 @@ export function ModalEditClientes({ cliente, onClose }: IModalEditClientesProps)
                         type="textarea"
                         label="Observação"
                         error={errors.obs?.message}
-                        textAreaProps={{
-                            ...register("obs"),
-                            placeholder: "Alérgico a camarão",
-                        }}
+                        textAreaProps={{ ...register("obs"), placeholder: "Alérgico a camarão" }}
                     />
-                    <Button label="Salvar" className="w-full" type="submit" disabled={loading} />
                 </div>
             </form>
         </Modal>

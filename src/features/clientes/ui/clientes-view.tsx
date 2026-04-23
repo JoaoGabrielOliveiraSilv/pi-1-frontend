@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { ModalClientes } from "./modal-clientes";
 import { ModalEditClientes } from "./modal-edit-clientes";
-import { ListPageLayout, Button, CardList, ResourceRowCard, RowEditDeleteActions } from "../../../../components";
+import { ListPageLayout, FloatingActionButton, CardList, ResourceRowCard, RowEditDeleteActions } from "../../../../components";
 import { Plus } from "lucide-react";
 import { useClientes } from "../hooks/use-clientes";
 import { useDeleteCliente } from "../hooks/use-delete-cliente";
 import { Input } from "@/shared/components/ui/input";
 import { Cliente } from "../types";
 import { useDebounce } from "@/shared/hooks/use-debounce";
+import { applyPhoneMask } from "../utils";
 
 export function ClientesView() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -26,9 +27,11 @@ export function ClientesView() {
       <ListPageLayout
         title="Clientes"
         description="Gerencie seus clientes."
-        headerAction={
-          <Button className="mt-4 shrink-0" icon={Plus} label="Novo cliente" onClick={() => setModalOpen(true)} />
-        }
+        headerAction={{
+          label: "Novo cliente",
+          icon: Plus,
+          onClick: () => setModalOpen(true)
+        }}
       >
         <Input
           placeholder="Buscar clientes..."
@@ -46,7 +49,7 @@ export function ClientesView() {
           renderItem={(cliente) => (
             <ResourceRowCard
               title={cliente.nome}
-              subtitle={cliente.telefone}
+              subtitle={applyPhoneMask(cliente.telefone)}
               description={cliente.obs ?? undefined}
               actions={
                 <RowEditDeleteActions
