@@ -1,6 +1,7 @@
 export enum ApiRoute {
     Clientes = "/api/clientes",
     Marmitas = "/api/marmitas",
+    Pedidos = "/api/pedidos",
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL
