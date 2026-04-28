@@ -1,4 +1,5 @@
 export enum ApiRoute {
+    Dashboard = "/api/dashboard",
     Clientes = "/api/clientes",
     Marmitas = "/api/marmitas",
     Pedidos = "/api/pedidos",
