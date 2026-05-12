@@ -49,6 +49,9 @@ export const apiClient = {
     post: <T>(route: ApiRoute, body: unknown) =>
         request<T>(route, { method: "POST", body: JSON.stringify(body) }),
 
+    getById: <T>(route: ApiRoute, id: number) =>
+        request<T>(`${route}/${id}`),
+
     put: <T>(route: ApiRoute, id: number, body: unknown) =>
         request<T>(`${route}/${id}`, { method: "PUT", body: JSON.stringify(body) }),
 

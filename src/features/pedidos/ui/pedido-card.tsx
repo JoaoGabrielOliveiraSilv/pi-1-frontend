@@ -36,7 +36,9 @@ export function PedidoCard({ pedido, onEdit, onDelete }: PedidoCardProps) {
                 Pedido #{pedido.idPedidos}
             </span>
             <div className="flex flex-col gap-1 text-sm text-muted-foreground">
-                <span>Quantidade: {pedido.quantidadeMarmitas}</span>
+                {pedido.itens.map((item) => (
+                    <span key={item.idPedidoItem}>{item.quantidade}× {item.marmitaDescricao}</span>
+                ))}
                 {pedido.dataEntrega && (
                     <span>Entrega: {formatDate(pedido.dataEntrega)}</span>
                 )}

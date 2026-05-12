@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { ModalPedidos } from "./modal-pedidos"
 import { ModalEditPedidos } from "./modal-edit-pedidos"
 import { CardList, ListPageLayout, ResourceRowCard, RowEditDeleteActions } from "../../../../components"
@@ -110,25 +111,30 @@ export function PedidosView() {
                         </p>
                     }
                     renderItem={(pedido) => (
-                        <ResourceRowCard
-                            title={`Pedido #${pedido.idPedidos}`}
-                            subtitle={[
-                                pedido.clienteNome,
-                                `${pedido.quantidadeMarmitas}x`,
-                                pedido.dataEntrega ? `Entrega: ${formatDate(pedido.dataEntrega)}` : null,
-                            ].filter(Boolean).join(" • ")}
-                            actions={
-                                <div className="flex items-center gap-3">
-                                    <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold", STATUS_STYLES[pedido.status])}>
-                                        {PEDIDO_STATUS_LABELS[pedido.status]}
-                                    </span>
-                                    <RowEditDeleteActions
-                                        onEdit={() => setEditingPedido(pedido)}
-                                        onDelete={() => deletePedido(pedido.idPedidos)}
-                                    />
-                                </div>
-                            }
-                        />
+                        <Link href={`/pedidos/${pedido.idPedidos}`} className="block">
+                            <ResourceRowCard
+                                title={`Pedido #${pedido.idPedidos}`}
+                                subtitle={[
+                                    pedido.clienteNome,
+                                    pedido.itens.map((i) => `${i.quantidade}× ${i.marmitaDescricao}`).join(", "),
+                                    pedido.dataEntrega ? `Entrega: ${formatDate(pedido.dataEntrega)}` : null,
+                                ].filter(Boolean).join(" • ")}
+                                actions={
+                                    <div
+                                        className="flex items-center gap-3"
+                                        onClick={(e) => e.preventDefault()}
+                                    >
+                                        <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold", STATUS_STYLES[pedido.status])}>
+                                            {PEDIDO_STATUS_LABELS[pedido.status]}
+                                        </span>
+                                        <RowEditDeleteActions
+                                            onEdit={() => setEditingPedido(pedido)}
+                                            onDelete={() => deletePedido(pedido.idPedidos)}
+                                        />
+                                    </div>
+                                }
+                            />
+                        </Link>
                     )}
                 />
             </ListPageLayout>
