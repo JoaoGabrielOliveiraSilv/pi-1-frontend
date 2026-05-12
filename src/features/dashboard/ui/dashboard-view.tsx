@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { ClipboardList, Clock, CheckCircle, Users, type LucideIcon } from "lucide-react"
 import { cn } from "@/shared/lib/cn"
 import { useDashboard } from "../hooks/use-dashboard"
@@ -42,18 +43,20 @@ function StatCard({ label, value, icon: Icon, iconClassName }: StatCardProps) {
 
 function PedidoRecenteRow({ pedido }: { pedido: PedidoRecente }) {
     return (
-        <div className="flex items-center justify-between gap-4 py-3 border-b border-border last:border-0">
-            <div className="flex flex-col gap-0.5">
-                <span className="text-sm font-semibold text-foreground">{pedido.clienteNome}</span>
-                <span className="text-xs text-muted-foreground">
-                    {pedido.dataEntrega ? `Entrega: ${formatDate(pedido.dataEntrega)} • ` : ""}
-                    {pedido.quantidadeMarmitas}x
+        <Link href={`/pedidos/${pedido.id}`} className="block hover:bg-muted/50 -mx-1 px-1 rounded transition-colors">
+            <div className="flex items-center justify-between gap-4 py-3 border-b border-border last:border-0">
+                <div className="flex flex-col gap-0.5">
+                    <span className="text-sm font-semibold text-foreground">{pedido.clienteNome}</span>
+                    <span className="text-xs text-muted-foreground">
+                        {pedido.dataEntrega ? `Entrega: ${formatDate(pedido.dataEntrega)} • ` : ""}
+                        {pedido.quantidadeMarmitas}x
+                    </span>
+                </div>
+                <span className={cn("shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold", STATUS_STYLES[pedido.status])}>
+                    {PEDIDO_STATUS_LABELS[pedido.status]}
                 </span>
             </div>
-            <span className={cn("shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold", STATUS_STYLES[pedido.status])}>
-                {PEDIDO_STATUS_LABELS[pedido.status]}
-            </span>
-        </div>
+        </Link>
     )
 }
 
