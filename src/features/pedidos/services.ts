@@ -1,11 +1,23 @@
 import { apiClient, ApiRoute } from "@/shared/lib/api-client"
-import { Pedido, PedidoStatus, PaginatedResponse } from "./types"
+import { Pedido, PedidoItem, PedidoStatus, PaginatedResponse } from "./types"
+
+interface RawPedidoItem {
+    idPedidoItem: number
+    quantidade: number
+    precoUnitario: string
+    marmitasIdMarmita: number
+    marmita: {
+        idMarmita: number
+        descricao: string
+        precoBase: string
+        adicionalEmbalagem: string
+        peso: string
+    }
+}
 
 interface RawPedido {
     idPedidos: number
     clientesIdClientes: number
-    marmitasIdMarmita: number
-    quantidadeMarmitas: number
     valorTotal: string
     dataPedido: string
     dataEntrega: string | null
@@ -17,12 +29,16 @@ interface RawPedido {
         endereco: string | null
         obs: string | null
     }
-    marmita: {
-        idMarmita: number
-        descricao: string
-        precoBase: string
-        adicionalEmbalagem: string
-        peso: string
+    itens: RawPedidoItem[]
+}
+
+function mapPedidoItem(raw: RawPedidoItem): PedidoItem {
+    return {
+        idPedidoItem: raw.idPedidoItem,
+        marmitaId: raw.marmitasIdMarmita,
+        marmitaDescricao: raw.marmita.descricao,
+        quantidade: raw.quantidade,
+        precoUnitario: raw.precoUnitario,
     }
 }
 
@@ -30,24 +46,30 @@ function mapPedido(raw: RawPedido): Pedido {
     return {
         idPedidos: raw.idPedidos,
         clienteId: raw.clientesIdClientes,
-        marmitaId: raw.marmitasIdMarmita,
-        quantidadeMarmitas: raw.quantidadeMarmitas,
+        clienteNome: raw.cliente.nome,
+        clienteTelefone: raw.cliente.telefone,
+        clienteEndereco: raw.cliente.endereco,
+        itens: raw.itens.map(mapPedidoItem),
+        dataPedido: raw.dataPedido,
         dataEntrega: raw.dataEntrega,
         status: raw.status,
-        clienteNome: raw.cliente.nome,
-        marmitaDescricao: raw.marmita.descricao,
+        valorTotal: raw.valorTotal,
     }
+}
+
+export interface PedidoItemPayload {
+    marmitaId: number
+    quantidade: number
 }
 
 export interface CreatePedidoPayload {
     clienteId: number
-    marmitaId: number
-    quantidadeMarmitas: number
+    itens: PedidoItemPayload[]
     dataEntrega?: string
 }
 
 export interface UpdatePedidoPayload {
-    quantidadeMarmitas?: number
+    itens?: PedidoItemPayload[]
     dataEntrega?: string | null
     status?: PedidoStatus
 }
@@ -73,6 +95,11 @@ export async function listPedidos(params: ListPedidosParams): Promise<PaginatedR
     if (params.dataFim) query.dataFim = params.dataFim
     const raw = await apiClient.get<PaginatedResponse<RawPedido>>(ApiRoute.Pedidos, query)
     return { ...raw, data: raw.data.map(mapPedido) }
+}
+
+export async function getPedidoById(id: number): Promise<Pedido> {
+    const raw = await apiClient.getById<RawPedido>(ApiRoute.Pedidos, id)
+    return mapPedido(raw)
 }
 
 export async function createPedido(payload: CreatePedidoPayload): Promise<void> {

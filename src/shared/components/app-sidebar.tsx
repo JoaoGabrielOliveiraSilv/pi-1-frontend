@@ -1,5 +1,6 @@
 import { SidebarBrand } from "./sidebar-brand";
 import { SidebarNav } from "./sidebar-nav";
+import { LogoutButton } from "./logout-button";
 
 export function AppSidebar() {
   return (
@@ -11,6 +12,9 @@ export function AppSidebar() {
         <SidebarBrand />
       </div>
       <SidebarNav />
+      <div className="mt-auto">
+        <LogoutButton />
+      </div>
     </aside>
   );
 }
