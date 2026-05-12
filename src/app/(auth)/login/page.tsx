@@ -21,7 +21,7 @@ export default function LoginPage() {
                     <p className="mt-1 text-sm text-muted-foreground">Faça login para continuar</p>
                 </div>
 
-                <form onSubmit={handleSubmit(login)} className="flex flex-col gap-4">
+                <form onSubmit={handleSubmit((data) => login(data))} className="flex flex-col gap-4">
                     <FormField
                         label="Usuário"
                         error={errors.username?.message}
