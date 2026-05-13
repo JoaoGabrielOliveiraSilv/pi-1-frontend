@@ -2,10 +2,29 @@
 
 Painel administrativo construído com **Next.js 16** (App Router), **React 19**, **TypeScript** e **Tailwind CSS v4**. Interface em **português**, tema claro e componentes reutilizáveis.
 
+## Infraestrutura
+
+| Camada | Serviço | Plano |
+|--------|---------|-------|
+| **Frontend** | [Vercel](https://vercel.com) | Hobby (Free) |
+| **Backend** | [Render](https://render.com) — Web Service | Free |
+
+### Variáveis de ambiente — Vercel (produção)
+
+| Variável | Descrição |
+|----------|-----------|
+| `NEXT_PUBLIC_API_URL` | URL base do backend no Render (ex.: `https://seu-projeto.onrender.com`) |
+
+### Deploy
+
+O deploy é automático a cada push na branch `main`. Não há build command customizado — a Vercel detecta Next.js automaticamente.
+
+---
+
 ## Requisitos
 
 - **Node.js** 20 ou superior (recomendado)
-- **npm** (ou outro gerenciador compatível)
+- **pnpm** (gerenciador de pacotes utilizado — `npm install -g pnpm`)
 
 ## Comandos básicos
 
