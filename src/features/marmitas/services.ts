@@ -35,6 +35,6 @@ export async function updateMarmita(id: number, payload: UpdateMarmitaPayload): 
     await apiClient.put(ApiRoute.Marmitas, id, payload)
 }
 
-export async function deleteMarmita(id: number): Promise<void> {
-    await apiClient.delete(ApiRoute.Marmitas, id)
+export async function deleteMarmita(id: number, force?: boolean): Promise<void> {
+    await apiClient.delete(ApiRoute.Marmitas, id, force ? { force: 'true' } : undefined)
 }

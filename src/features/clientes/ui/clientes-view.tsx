@@ -11,6 +11,7 @@ import { Input } from "@/shared/components/ui/input";
 import { Cliente } from "../types";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 import { applyPhoneMask } from "../utils";
+import { ConfirmDeleteModal } from "@/shared/components/ui/confirm-delete-modal";
 
 export function ClientesView() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -18,12 +19,20 @@ export function ClientesView() {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search);
   const { clientes, loading } = useClientes({ search: debouncedSearch });
-  const { mutate: deleteCliente } = useDeleteCliente();
+  const { tryDelete, confirmDelete, cancelDelete, needsConfirmation, loading: deleting } = useDeleteCliente();
 
   return (
     <>
       <ModalClientes open={modalOpen} onClose={() => setModalOpen(false)} />
       <ModalEditClientes cliente={editingCliente} onClose={() => setEditingCliente(null)} />
+      <ConfirmDeleteModal
+        open={needsConfirmation}
+        title="Remover cliente"
+        description="Este cliente possui pedidos associados. Ao removê-lo, ele não aparecerá mais nas listas, mas os pedidos existentes serão mantidos com seus dados preservados."
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+        loading={deleting}
+      />
       <ListPageLayout
         title="Clientes"
         description="Gerencie seus clientes."
@@ -54,7 +63,7 @@ export function ClientesView() {
               actions={
                 <RowEditDeleteActions
                   onEdit={() => setEditingCliente(cliente)}
-                  onDelete={() => deleteCliente(cliente.idClientes)}
+                  onDelete={() => tryDelete(cliente.idClientes)}
                 />
               }
             />

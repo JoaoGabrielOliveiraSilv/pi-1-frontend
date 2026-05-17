@@ -35,6 +35,6 @@ export async function updateCliente(id: number, payload: UpdateClientePayload): 
     await apiClient.put(ApiRoute.Clientes, id, payload)
 }
 
-export async function deleteCliente(id: number): Promise<void> {
-    await apiClient.delete(ApiRoute.Clientes, id)
+export async function deleteCliente(id: number, force?: boolean): Promise<void> {
+    await apiClient.delete(ApiRoute.Clientes, id, force ? { force: 'true' } : undefined)
 }

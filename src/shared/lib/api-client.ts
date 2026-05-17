@@ -1,5 +1,16 @@
 import { getToken, clearToken } from './auth';
 
+export class ApiError extends Error {
+    constructor(
+        message: string,
+        public readonly status: number,
+        public readonly code?: string,
+    ) {
+        super(message)
+        this.name = 'ApiError'
+    }
+}
+
 export enum ApiRoute {
     Dashboard = "/api/dashboard",
     Clientes = "/api/clientes",
@@ -28,7 +39,7 @@ async function request<T>(route: ApiRoute | string, options?: RequestInit): Prom
     if (!res.ok) {
         const body = await res.json().catch(() => null)
         const message = body?.error?.message ?? `Request failed: ${res.status} ${route}`
-        throw new Error(message)
+        throw new ApiError(message, res.status, body?.error?.code)
     }
 
     if (res.status === 204 || res.headers.get("content-length") === "0") {
@@ -55,6 +66,8 @@ export const apiClient = {
     put: <T>(route: ApiRoute, id: number, body: unknown) =>
         request<T>(`${route}/${id}`, { method: "PUT", body: JSON.stringify(body) }),
 
-    delete: (route: ApiRoute, id: number) =>
-        request<void>(`${route}/${id}`, { method: "DELETE" }),
+    delete: (route: ApiRoute, id: number, params?: Record<string, string>) => {
+        const qs = params ? `?${new URLSearchParams(params)}` : ''
+        return request<void>(`${route}/${id}${qs}`, { method: "DELETE" })
+    },
 }
