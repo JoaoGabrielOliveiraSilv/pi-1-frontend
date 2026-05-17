@@ -11,6 +11,7 @@ import { useDeleteMarmita } from "../hooks/use-delete-marmita"
 import { Input } from "@/shared/components/ui/input"
 import { Marmita } from "../types"
 import { useDebounce } from "@/shared/hooks/use-debounce"
+import { ConfirmDeleteModal } from "@/shared/components/ui/confirm-delete-modal"
 
 export function MarmitasView() {
     const [modalOpen, setModalOpen] = useState(false)
@@ -18,12 +19,20 @@ export function MarmitasView() {
     const [search, setSearch] = useState("")
     const debouncedSearch = useDebounce(search)
     const { marmitas, loading } = useMarmitas({ search: debouncedSearch })
-    const { mutate: deleteMarmita } = useDeleteMarmita()
+    const { tryDelete, confirmDelete, cancelDelete, needsConfirmation, loading: deleting } = useDeleteMarmita()
 
     return (
         <>
             <ModalMarmitas open={modalOpen} onClose={() => setModalOpen(false)} />
             <ModalEditMarmitas marmita={editingMarmita} onClose={() => setEditingMarmita(null)} />
+            <ConfirmDeleteModal
+                open={needsConfirmation}
+                title="Remover marmita"
+                description="Esta marmita está associada a pedidos existentes. Ao removê-la, ela não aparecerá mais no cardápio, mas os pedidos existentes serão mantidos com seus dados preservados."
+                onConfirm={confirmDelete}
+                onCancel={cancelDelete}
+                loading={deleting}
+            />
             <ListPageLayout
                 title="Marmitas"
                 description="Gerencie seu cardápio de marmitas."
@@ -49,7 +58,7 @@ export function MarmitasView() {
                                 key={marmita.idMarmita}
                                 marmita={marmita}
                                 onEdit={() => setEditingMarmita(marmita)}
-                                onDelete={() => deleteMarmita(marmita.idMarmita)}
+                                onDelete={() => tryDelete(marmita.idMarmita)}
                             />
                         ))}
                     </div>

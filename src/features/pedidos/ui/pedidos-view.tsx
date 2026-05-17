@@ -15,21 +15,31 @@ import { Pedido, PedidoStatus, PEDIDO_STATUSES, PEDIDO_STATUS_LABELS } from "../
 
 type PeriodoFiltro = "" | "hoje" | "semanal" | "mensal"
 
+function fmtLocal(d: Date) {
+    const y = d.getFullYear()
+    const m = String(d.getMonth() + 1).padStart(2, "0")
+    const day = String(d.getDate()).padStart(2, "0")
+    return `${y}-${m}-${day}`
+}
+
 function getDateRange(periodo: PeriodoFiltro): { dataInicio?: string; dataFim?: string } {
     if (!periodo) return {}
-    const fmt = (d: Date) => d.toISOString().slice(0, 10)
     const hoje = new Date()
     if (periodo === "hoje") {
-        const s = fmt(hoje)
+        const s = fmtLocal(hoje)
         return { dataInicio: s, dataFim: s }
     }
     if (periodo === "semanal") {
-        const inicio = new Date(hoje)
-        inicio.setDate(hoje.getDate() - 6)
-        return { dataInicio: fmt(inicio), dataFim: fmt(hoje) }
+        const domingo = new Date(hoje)
+        domingo.setDate(hoje.getDate() - hoje.getDay())
+        const sabado = new Date(hoje)
+        sabado.setDate(hoje.getDate() + (6 - hoje.getDay()))
+        return { dataInicio: fmtLocal(domingo), dataFim: fmtLocal(sabado) }
     }
+    // mensal: dia 1 até último dia do mês
     const inicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1)
-    return { dataInicio: fmt(inicio), dataFim: fmt(hoje) }
+    const fim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0)
+    return { dataInicio: fmtLocal(inicio), dataFim: fmtLocal(fim) }
 }
 
 const STATUS_STYLES: Record<PedidoStatus, string> = {
@@ -75,32 +85,41 @@ export function PedidosView() {
                     onClick: () => setModalOpen(true),
                 }}
             >
-                <div className="flex flex-col gap-3 sm:flex-row">
-                    <Input
-                        placeholder="Buscar por cliente..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                    <select
-                        value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value as PedidoStatus | "")}
-                        className={`${SELECT_CLASS} sm:w-48`}
-                    >
-                        <option value="">Todos os status</option>
-                        {PEDIDO_STATUSES.map((s) => (
-                            <option key={s} value={s}>{PEDIDO_STATUS_LABELS[s]}</option>
-                        ))}
-                    </select>
-                    <select
-                        value={periodoFilter}
-                        onChange={(e) => setPeriodoFilter(e.target.value as PeriodoFiltro)}
-                        className={`${SELECT_CLASS} sm:w-40`}
-                    >
-                        <option value="">Qualquer data</option>
-                        <option value="hoje">Hoje</option>
-                        <option value="semanal">Esta semana</option>
-                        <option value="mensal">Este mês</option>
-                    </select>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+                    <div className="flex flex-1 flex-col gap-1">
+                        <label className="text-xs font-medium text-muted-foreground">Buscar</label>
+                        <Input
+                            placeholder="Nome do cliente..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-col gap-1 sm:w-48">
+                        <label className="text-xs font-medium text-muted-foreground">Status</label>
+                        <select
+                            value={statusFilter}
+                            onChange={(e) => setStatusFilter(e.target.value as PedidoStatus | "")}
+                            className={SELECT_CLASS}
+                        >
+                            <option value="">Todos</option>
+                            {PEDIDO_STATUSES.map((s) => (
+                                <option key={s} value={s}>{PEDIDO_STATUS_LABELS[s]}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="flex flex-col gap-1 sm:w-52">
+                        <label className="text-xs font-medium text-muted-foreground">Entrega</label>
+                        <select
+                            value={periodoFilter}
+                            onChange={(e) => setPeriodoFilter(e.target.value as PeriodoFiltro)}
+                            className={SELECT_CLASS}
+                        >
+                            <option value="">Qualquer data</option>
+                            <option value="hoje">Hoje</option>
+                            <option value="semanal">Esta semana</option>
+                            <option value="mensal">Este mês</option>
+                        </select>
+                    </div>
                 </div>
                 <CardList
                     items={loading ? [] : pedidos}
